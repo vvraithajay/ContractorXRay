@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/E:/Android/sdk/samples/advanced/app/src/main/res/values-sw600dp/dimens.xml -->
+    <eat-comment/>
+    <dimen name="about_text">23sp</dimen>
+    <dimen name="about_title">25sp</dimen>
+    <dimen name="splash_subtitle">40sp</dimen>
+    <dimen name="splash_title">80sp</dimen>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/E:/Android/sdk/samples/advanced/app/src/main/res/values-small/dimens.xml -->
+    <eat-comment/>
+    <dimen name="splash_subtitle">15sp</dimen>
+    <dimen name="splash_title">25sp</dimen>
+</resources>

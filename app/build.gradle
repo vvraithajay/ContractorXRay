@@ -1,0 +1,77 @@
+apply plugin: 'com.android.application'
+
+def VUFORIA_SDK_DIR = '../../..'
+def JAR_DIR = 'build/java/vuforia'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+
+    sourceSets.main {
+        jni.srcDirs = []
+        jniLibs.srcDir "src/main/libs"
+    }
+
+    defaultConfig {
+        applicationId "com.qualcomm.QCARSamples.ImageTargets"
+        minSdkVersion 8
+        targetSdkVersion 22
+        versionCode 200
+        versionName "5.0"
+    }
+	
+    archivesBaseName = rootProject.projectDir.getName()
+	
+    buildTypes {
+        release {
+            minifyEnabled false
+            ndk {
+                abiFilters "armeabi-v7a"
+            }
+        }
+        debug {
+            minifyEnabled false
+            debuggable true
+            ndk {
+                abiFilters "armeabi-v7a"
+            }
+        }
+    }
+
+    task buildNative(type: Exec, description: 'Compile JNI source via NDK') {
+        println('compiling jni code with ndk-build...')
+        def ndkDir = android.ndkDirectory
+        if (System.properties['os.name'].toLowerCase().contains('windows')) {
+            commandLine "$ndkDir/ndk-build.cmd",
+                    '-C', file('src/main/jni').absolutePath
+                    // Additional ndk-build arguments, such as NDK_DEBUG, can be provided here
+        } else {
+            commandLine "$ndkDir/ndk-build",
+                    '-C', file('src/main/jni').absolutePath
+                    // Additional ndk-build arguments, such as NDK_DEBUG, can be provided here
+        }
+    }
+
+    task cleanNative(type: Exec, description: 'Clean JNI object files') {
+        def ndkDir = android.ndkDirectory
+        if (System.properties['os.name'].toLowerCase().contains('windows')) {
+            commandLine "$ndkDir/ndk-build.cmd",
+                    '-C', file('src/main/jni').absolutePath,
+                    'clean'
+        } else {
+            commandLine "$ndkDir/ndk-build",
+                    '-C', file('src/main/jni').absolutePath,
+                    'clean'
+        }
+    }
+
+    clean.dependsOn 'cleanNative'
+
+    tasks.withType(JavaCompile) {
+        compileTask -> compileTask.dependsOn buildNative
+    }
+}
+
+dependencies {
+    compile files("$VUFORIA_SDK_DIR/$JAR_DIR/Vuforia.jar")
+}
